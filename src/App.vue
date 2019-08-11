@@ -28,11 +28,11 @@
         </template>
       </table>
 
+      <div style="margin-top: 50px;">
+        <button @click="imageFilter()">이미지 정리</button>
+      </div>
     </div>
     
-    <div>
-      <button @click="imageFilter()">이미지 정리</button>
-    </div>
     
   </div>
 </template>
@@ -42,7 +42,7 @@ import axios from 'axios'
 export default {
   data(){
     return {
-      key: '윤세아',
+      key: '',
       yyyymmdd: this.getYyyymmdd(),
       fileList: [],
       jsonList: [],

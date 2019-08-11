@@ -106,6 +106,7 @@ app.post('/imageFilter', (req,res)=>{
       return fs.statSync(testFolder+'/'+file2).size - fs.statSync(testFolder+'/'+file1).size
     })
     let prevSize = 0
+    const overSizedFile = []
     files.forEach((file, index) => {
       
       const currentFileSize = fs.statSync(testFolder+'/'+file).size
@@ -114,13 +115,53 @@ app.post('/imageFilter', (req,res)=>{
         removeFile(testFolder+'/'+file, 'samesize')
 
       // 20kb 보다 작으면 삭제
-      }else if(currentFileSize < 20000){
-        removeFile(testFolder+'/'+file, 'under 20000')
+      }else if(currentFileSize < 50000){
+        removeFile(testFolder+'/'+file, 'under 50000')
+      
+      }else{
+        // 압축 필요한지 ? 10mb
+        if(currentFileSize >= 10000000){
+          overSizedFile.push(file)
+        }
       }
       prevSize = currentFileSize
     })
+    
+    if(overSizedFile.length){
+      compressImgs(overSizedFile, testFolder)
+    }
   })
 })
+
+const compress_images = require('compress-images')
+function compressImgs(list, testFolder){
+  const compressDir = `${testFolder}/compress`;
+  if (!fs.existsSync(compressDir)) {
+    fs.mkdirSync(compressDir)
+    console.log('compress dir created')
+  }
+
+  // INPUT_path_to_your_images = 'src/img/**/*.{jpg,JPG,jpeg,JPEG,png,svg,gif}';
+  // OUTPUT_path = 'build/img/';
+  
+  // https://www.npmjs.com/package/compress-images
+  list.map((inputFile)=>{
+    // console.log('inputFile',inputFile)
+    compress_images(testFolder+'/'+inputFile, compressDir+'/', {compress_force: false, statistic: true, autoupdate: true}, false,
+        {jpg: {engine: 'mozjpeg', command: ['-quality', '60']}},
+        {png: {engine: 'pngquant', command: ['--quality=20-50']}},
+        {svg: {engine: 'svgo', command: '--multipass'}},
+        {gif: {engine: 'gifsicle', command: ['--colors', '64', '--use-col=web']}}, function(error, completed, statistic){
+      console.log('-------------');
+      console.log(error);
+      console.log(completed);
+      console.log(statistic);
+      console.log('-------------');                                   
+    })
+  })
+
+
+}
 
 function removeFile(url, reason=''){
   fs.unlink(url, (err) => {
