@@ -2,18 +2,37 @@
   "name": "mhtmht",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "webpack -w --mode development --devtool inline-source-map",
+    "build": "webpack --mode production --progress"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@babel/core": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "axios": "^0.18.0",
+    "babel-loader": "^8.0.5",
+    "babel-polyfill": "^6.26.0",
     "body-parser": "^1.19.0",
     "cheerio": "^1.0.0-rc.3",
-    "ejs": "^2.6.1",
+    "css-loader": "^2.1.1",
     "express": "^4.16.4",
     "fs": "0.0.1-security",
-    "request": "^2.88.0"
+    "glob": "^7.1.4",
+    "html-webpack-plugin": "^3.2.0",
+    "request": "^2.88.0",
+    "style-loader": "^0.23.1",
+    "text-mask-addons": "^3.8.0",
+    "urlencode": "^1.1.0",
+    "vee-validate": "^2.2.7",
+    "vue": "^2.6.10",
+    "vue-loader": "^15.7.0",
+    "vue-template-compiler": "^2.6.10",
+    "vue-text-mask": "^6.1.2",
+    "webpack": "^4.31.0",
+    "webpack-cli": "^3.3.2",
+    "webpack-dev-server": "^3.3.1"
   }
 }
