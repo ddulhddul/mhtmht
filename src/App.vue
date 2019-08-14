@@ -1,9 +1,11 @@
 <template>
   <div>
-    <button @click="splitFolder()">splitFolder</button>
+    
+    <h1>므흣흣</h1>
+    <br>
     <!-- https://datalab.naver.com/keyword/realtimeList.naver -->
     <a href="https://datalab.naver.com/keyword/realtimeList.naver" target="_blank">https://datalab.naver.com/keyword/realtimeList.naver </a>
-    <h1>므흣흣</h1>
+    <br>
     <h4>{{`D:\\dev\\mhtmht\\images\\${yyyymmdd}`}}</h4>
     <div>
       <input v-model="key" autofocus @keypress.enter="startStep1()" ref="inputKey" />
@@ -28,11 +30,15 @@
         </template>
       </table>
 
-      <div style="margin-top: 50px;">
-        <button @click="imageFilter()">이미지 정리</button>
-      </div>
     </div>
-    
+
+    <br>
+    <div style="margin-top: 5px;">
+      <button @click="imageFilter()">이미지 정리</button>
+    </div>
+
+    <br>
+    <button @click="splitFolder()">splitFolder</button>
     
   </div>
 </template>

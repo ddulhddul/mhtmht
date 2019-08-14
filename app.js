@@ -146,18 +146,24 @@ function compressImgs(list, testFolder){
   
   // https://www.npmjs.com/package/compress-images
   list.map((inputFile)=>{
+    // fs.createReadStream(compressDir+'/'+inputFile).pipe(fs.createWriteStream(testFolder+'/'+inputFile))
+    fs.copyFile(testFolder+'/'+inputFile, compressDir+'/'+inputFile, (err) => {
+      if (err) throw err;
+      console.log('copy',inputFile);
+    });    
+
     // console.log('inputFile',inputFile)
-    compress_images(testFolder+'/'+inputFile, compressDir+'/', {compress_force: false, statistic: true, autoupdate: true}, false,
-        {jpg: {engine: 'mozjpeg', command: ['-quality', '60']}},
-        {png: {engine: 'pngquant', command: ['--quality=20-50']}},
-        {svg: {engine: 'svgo', command: '--multipass'}},
-        {gif: {engine: 'gifsicle', command: ['--colors', '64', '--use-col=web']}}, function(error, completed, statistic){
-      console.log('-------------');
-      console.log(error);
-      console.log(completed);
-      console.log(statistic);
-      console.log('-------------');                                   
-    })
+    // compress_images(testFolder+'/'+inputFile, compressDir+'/', {compress_force: false, statistic: true, autoupdate: true}, false,
+    //     {jpg: {engine: 'mozjpeg', command: ['-quality', '60']}},
+    //     {png: {engine: 'pngquant', command: ['--quality=20-50']}},
+    //     {svg: {engine: 'svgo', command: '--multipass'}},
+    //     {gif: {engine: 'gifsicle', command: ['--colors', '64', '--use-col=web']}}, function(error, completed, statistic){
+    //   console.log('-------------');
+    //   console.log(error);
+    //   console.log(completed);
+    //   console.log(statistic);
+    //   console.log('-------------');                                   
+    // })
   })
 
 
