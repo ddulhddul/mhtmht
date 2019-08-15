@@ -114,13 +114,13 @@ app.post('/imageFilter', (req,res)=>{
       if(currentFileSize == prevSize){
         removeFile(testFolder+'/'+file, 'samesize')
 
-      // 20kb 보다 작으면 삭제
-      }else if(currentFileSize < 50000){
+      // 50kb 보다 작으면 삭제
+      }else if(currentFileSize < 51200){
         removeFile(testFolder+'/'+file, 'under 50000')
       
       }else{
         // 압축 필요한지 ? 10mb
-        if(currentFileSize >= 10000000){
+        if(currentFileSize >= 10240000){
           overSizedFile.push(file)
         }
       }
