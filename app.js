@@ -89,9 +89,11 @@ app.post('/splitFolder', (req,res)=>{
         }
       }
       // fs.rename(getFileName, __dirname + '/new_folder/' + getFileName)
-      fs.rename(testFolder+'/'+file, folderNm+'/'+file, (err)=>{
-        err && console.log('error',err)
-      })
+      if(!fs.lstatSync(testFolder+'/'+file).isDirectory()){
+        fs.rename(testFolder+'/'+file, folderNm+'/'+file, (err)=>{
+          err && console.log('error',err)
+        })
+      }
       // console.log(file, fs.statSync(testFolder+'/'+file).size, index)
     });
   });
@@ -147,9 +149,9 @@ function compressImgs(list, testFolder){
   // https://www.npmjs.com/package/compress-images
   list.map((inputFile)=>{
     // fs.createReadStream(compressDir+'/'+inputFile).pipe(fs.createWriteStream(testFolder+'/'+inputFile))
-    fs.copyFile(testFolder+'/'+inputFile, compressDir+'/'+inputFile, (err) => {
+    fs.rename(testFolder+'/'+inputFile, compressDir+'/'+inputFile, (err) => {
       if (err) throw err;
-      console.log('copy',inputFile);
+      console.log('move', inputFile);
     });    
 
     // console.log('inputFile',inputFile)
