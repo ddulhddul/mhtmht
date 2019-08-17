@@ -135,7 +135,7 @@ app.post('/imageFilter', (req,res)=>{
   })
 })
 
-const compress_images = require('compress-images')
+// const compress_images = require('compress-images')
 function compressImgs(list, testFolder){
   const compressDir = `${testFolder}/compress`;
   if (!fs.existsSync(compressDir)) {
