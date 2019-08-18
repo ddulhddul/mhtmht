@@ -185,3 +185,51 @@ function removeFile(url, reason=''){
     console.log(`${url} was deleted // ${reason}`);
   })
 }
+
+app.post('/srchInfoUrl', async (req, res)=>{
+  const param = req.body || {}
+
+  let result = {}
+  try {
+    const $ = await ServerUtil.urlRequestWithHeaders(param.infoUrl, {
+      'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3',
+      'accept-language': 'ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7',
+      'cache-control': 'max-age=0',
+      'if-none-match': 'nexearch^^^1^20170905114306^^1^1566079328936^1-1566085655639',
+      'sec-fetch-mode': 'navigate',
+      'sec-fetch-site': 'none',
+      'sec-fetch-user': '?1',
+      'upgrade-insecure-requests': '1',
+      'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36',
+    })
+
+    let list = $('.profile_dsc dt, .profile_dsc dd')
+    const summary = []
+    for (let index = 0; index < list.length; index++) {
+      const element = list[index]
+      if($(element).prop('tagName') == 'DT') summary.push(' ')
+      summary.push($(element).text())
+    }
+    result.summary = summary
+
+    list = $('.workact_dsc .workact')
+    let subSummary = []
+    for (let index = 0; index < list.length; index++) {
+      const element = list[index]
+      subSummary.push(' ')
+      subSummary.push($(element).find('h3').text())
+      // subSummary.push($(element).find('ul').text())
+      const sublist = $(element).find('li')
+      for (let i = 0; i < sublist.length; i++) {
+        const subelement = sublist[i]
+        subSummary.push($(subelement).text())
+      }
+    }
+    result.subSummary = subSummary
+    
+  } catch (error) {
+    console.log('error', error, param)
+  }
+
+  res.send(result)
+})

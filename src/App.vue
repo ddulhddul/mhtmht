@@ -1,10 +1,23 @@
 <template>
   <div>
     
-    <h1>므흣흣</h1>
-    <br>
-    <!-- https://datalab.naver.com/keyword/realtimeList.naver -->
-    <a href="https://datalab.naver.com/keyword/realtimeList.naver" target="_blank">https://datalab.naver.com/keyword/realtimeList.naver </a>
+    <h1>므흣흣</h1><br>
+    <div>
+      <a href="https://datalab.naver.com/keyword/realtimeList.naver" target="_blank">
+        https://datalab.naver.com/keyword/realtimeList.naver
+      </a>
+    </div><br>
+    <div>
+      <a href="https://people.search.naver.com" target="_blank">
+        https://people.search.naver.com
+      </a>
+    </div>
+    <div>
+      <input v-model="infoUrl" @keypress.enter="srchInfoUrl()" ref="infoUrl" />
+      <button @click="srchInfoUrl()">정보검색</button>
+    </div>
+    <!-- <div v-html="infoUrlResult"></div> -->
+    <textarea v-model="infoUrlResult" />
     <br>
     <h4>{{`D:\\dev\\mhtmht\\images\\${yyyymmdd}`}}</h4>
     <div>
@@ -49,6 +62,8 @@ export default {
   data(){
     return {
       key: '',
+      infoUrl: 'https://people.search.naver.com/search.naver?where=nexearch&sm=tab_ppn&query=소녀시대태연&os=145072&ie=utf8&key=PeopleService',
+      infoUrlResult: '',
       yyyymmdd: this.getYyyymmdd(),
       fileList: [],
       jsonList: [],
@@ -149,6 +164,24 @@ export default {
         }
       }).then((res)=>{
         alert('success')
+      })
+    },
+
+    srchInfoUrl(){
+      if(!this.infoUrl) return
+      this.$refs.infoUrl.blur()
+      axios({
+        method: 'POST',
+        url: "/srchInfoUrl",
+        data: {
+          infoUrl: this.infoUrl
+        }
+      }).then((res)=>{
+        console.log('srchInfoUrl end', res.data)
+        this.infoUrlResult = 
+          (res.data.summary || []).join('\n') + 
+          '\n\n' +
+          (res.data.subSummary || []).join('\n')
       })
     }
   }

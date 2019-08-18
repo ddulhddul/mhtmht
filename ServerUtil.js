@@ -33,7 +33,7 @@ module.exports = {
   },
 
 
-  urlRequest(url) {
+  urlRequest(url, headers={}) {
     return new Promise(function (resolve, reject) {
       request({
         url,
@@ -47,7 +47,37 @@ module.exports = {
           'sec-fetch-user': '?1',
           'upgrade-insecure-requests': 1,
           'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36',
-          'x-client-data': 'CIe2yQEIpbbJAQjEtskBCKmdygEIqKPKAQjiqMoBCJetygEIza3KAQjJr8oB'
+          'x-client-data': 'CIe2yQEIpbbJAQjEtskBCKmdygEIqKPKAQjiqMoBCJetygEIza3KAQjJr8oB',
+          ...headers
+        }
+      }, function (error, response, body) {
+        try {
+          if (error || !body) reject('Unexpected Error :::')
+          else{
+            let $ = cheerio.load(body)
+            resolve($)
+          }
+
+        } catch(e) {
+          console.log('request Error :::', e)
+          reject('request Error :::')
+        }
+      })
+    })
+  },
+
+  urlRequestWithHeaders(url, headers={}) {
+    // const query = url.replace(/query\=(.*?)\&/,'$1')
+    const before = url.replace(/(.*query\=)(.*?)(\&.*)/,'$1')
+    const query = url.replace(/(.*query\=)(.*?)(\&.*)/,'$2')
+    const after = url.replace(/(.*query\=)(.*?)(\&.*)/,'$3')
+    const thisUrl = before + urlencode(query) + after
+    console.log('thisUrl', thisUrl)
+    return new Promise(function (resolve, reject) {
+      request({
+        url: thisUrl,
+        headers: {
+          ...headers
         }
       }, function (error, response, body) {
         try {
