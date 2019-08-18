@@ -10,6 +10,14 @@ app.use(bodyParser.json({limit: '1000kb'}))
 app.use(express.static(path.join(__dirname, 'dist')));
 const fs = require('fs')
 
+const webpack = require('webpack')
+const config = require('./webpack.config')
+const compiler = webpack(config)
+app.use(require('webpack-dev-middleware')(compiler, {
+  noInfo: true, publicPath: config.output.publicPath
+}))
+app.use(require('webpack-hot-middleware')(compiler))
+
 // https://datalab.naver.com/keyword/realtimeList.naver
 // https://www.google.co.kr/imghp?hl=ko
 // 이미지압축
