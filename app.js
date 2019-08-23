@@ -10,6 +10,19 @@ app.use(bodyParser.json({limit: '1000kb'}))
 app.use(express.static(path.join(__dirname, 'dist')));
 const fs = require('fs')
 
+// DB
+const mongoose = require('mongoose')
+mongoose.set('useNewUrlParser', true)
+mongoose.Promise = require('bluebird')
+const db = mongoose.connection
+db.on('error', console.error)
+db.once('open', function () {
+  console.log('Connected to mongod server')
+})
+mongoose.connect('mongodb://127.0.0.1/chartdb')
+const DBUtil = require('./mongodb/DBUtil')
+
+// webpack
 const webpack = require('webpack')
 const config = require('./webpack.config')
 const compiler = webpack(config)
@@ -232,4 +245,19 @@ app.post('/srchInfoUrl', async (req, res)=>{
   }
 
   res.send(result)
+})
+
+
+app.post('/listMht', async (req, res)=>{
+  const param = req.body || {}
+
+  const list = await DBUtil.listMht(param)
+  res.send({ list })
+})
+
+app.post('/updateMht', async (req, res)=>{
+  const param = req.body || {}
+
+  await DBUtil.updateMht(param)
+  res.send({ result: 'SUCCESS' })
 })
