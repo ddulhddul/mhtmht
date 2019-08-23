@@ -5,7 +5,7 @@
         <button @click="listMht()">Search</button>
         <br><br>
         <div style="margin-left: 10px;">
-          <div v-for="(mht) in mhtList" :key="mht.key" @click="changeUrlList(mht)" :style="{color: mht.key==key? 'red': 'black'}">
+          <div v-for="(mht, index) in mhtList" :key="mht.key+'_'+index" @click="changeUrlList(mht)" :style="{color: mht.key==key? 'red': 'black'}">
             {{ mht.key }} {{ mht.yyyymmdd }}
           </div>
           <br>
@@ -150,7 +150,7 @@ export default {
 </script>
 <style>
 .row {
-  height: 600px;
+  /* height: 600px; */
   overflow-y: auto;
   width: 100%;
   display: flex;

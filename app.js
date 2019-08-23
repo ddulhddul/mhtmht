@@ -23,21 +23,24 @@ mongoose.connect('mongodb://127.0.0.1/chartdb')
 const DBUtil = require('./mongodb/DBUtil')
 
 // webpack
-const webpack = require('webpack')
-const config = require('./webpack.config')
-const compiler = webpack(config)
-app.use(require('webpack-dev-middleware')(compiler, {
-  noInfo: true, publicPath: config.output.publicPath
-}))
-app.use(require('webpack-hot-middleware')(compiler))
+console.log('process.env.NODE_ENV', process.env.NODE_ENV)
+if (process.env.NODE_ENV !== 'production') {
+  const webpack = require('webpack')
+  const config = require('./webpack.config')
+  const compiler = webpack(config)
+  app.use(require('webpack-dev-middleware')(compiler, {
+    noInfo: true, publicPath: config.output.publicPath
+  }))
+  app.use(require('webpack-hot-middleware')(compiler))
+}
 
 // https://datalab.naver.com/keyword/realtimeList.naver
 // https://www.google.co.kr/imghp?hl=ko
 // 이미지압축
 // https://www.iloveimg.com/ko/compress-image
 
-app.listen(3000, function () {
-  console.log('app listening on port 3000!!')
+app.listen(4000, function () {
+  console.log('app listening on port 4000!!')
 })
 
 app.get('/', (req, res)=>{
