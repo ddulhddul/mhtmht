@@ -2,6 +2,6 @@
 /images/
 /dist/
 /json/
-*.html
+/*.html
 customVariable.js
 /log/
