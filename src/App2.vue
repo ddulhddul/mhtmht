@@ -70,7 +70,7 @@ export default {
         data: {}
       }).then((res)=>{
         console.log('this.mhtList', res.data.list)
-        this.mhtList = (res.data.list || [])
+        this.mhtList = (res.data.list || []).reverse()
         // .map((obj)=>obj._doc||{})
       })
     },
