@@ -21,6 +21,7 @@
     <br>
     <h4>{{`D:\\dev\\mhtmht\\images\\${yyyymmdd}`}}</h4>
     <div>
+      <textarea v-model="urlText" class="textarea" />
       <input v-model="key" autofocus @keypress.enter="startStep1()" ref="inputKey" />
       <button @click="startStep1()">Go</button>
     </div>
@@ -68,6 +69,7 @@ export default {
       fileList: [],
       jsonList: [],
       urlList: [],
+      urlText: '',
       successObj: {}
     }
   },
@@ -99,18 +101,25 @@ export default {
     },
 
     getImageList(){
-      axios({
-        method: 'POST',
-        url: '/getImageList',
-        data: {
-          key: this.key
-        }
-      }).then((res)=>{
-        this.urlList = res.data.list || []
+      // axios({
+      //   method: 'POST',
+      //   url: '/getImageList',
+      //   data: {
+      //     key: this.key
+      //   }
+      // }).then((res)=>{
+        // this.urlList = res.data.list || []
+        this.urlList = this.urlText.split('\n').map((obj, index)=>{
+          return {
+            url: obj,
+            query: this.key,
+            number: index
+          }
+        })
         console.log('this.urlList', this.urlList)
         // image download start
         if(this.urlList.length) this.imageDownloadProcess(0, true)
-      })
+      // })
     },
 
     async imageDownloadProcess(number=0, nextProcessTf){
