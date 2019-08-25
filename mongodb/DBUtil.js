@@ -4,7 +4,7 @@ const Mht = require('./model/Mht')
 module.exports = {
 
   async listMht () {
-    return await Mht.find({}, null, { sort: {  } }) || {}
+    return await Mht.find({}, null, { sort: {  } }).limit(50) || {}
   },
 
   async updateMht (obj={}) {
@@ -13,10 +13,18 @@ module.exports = {
       key: obj.key, 
     })
     await Mht.insertMany([{
-      // yyyymmdd: obj.yyyymmdd, 
+      yyyymmdd: obj.yyyymmdd, 
       key: obj.key, 
       urlList: obj.urlList
     }])
+  },
+
+  async changeDone (obj={}) {
+    await Mht.updateOne({ 
+      key: obj.key
+    }, {
+      done: obj.done
+    })
   },
 
 }

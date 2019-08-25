@@ -264,3 +264,10 @@ app.post('/updateMht', async (req, res)=>{
   await DBUtil.updateMht(param)
   res.send({ result: 'SUCCESS' })
 })
+
+app.post('/changeDone', async (req, res)=>{
+  const param = req.body || {}
+
+  await DBUtil.changeDone(param)
+  res.send({ result: 'SUCCESS' })
+})

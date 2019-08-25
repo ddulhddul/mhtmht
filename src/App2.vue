@@ -5,9 +5,22 @@
         <button @click="listMht()">Search</button>
         <br><br>
         <div style="margin-left: 10px;">
-          <div v-for="(mht, index) in mhtList" :key="mht.key+'_'+index" @click="changeUrlList(mht)" :style="{color: mht.key==key? 'red': 'black'}">
-            {{ mht.key }} {{ mht.yyyymmdd }}
-          </div>
+          <table style="table-layout: fixed;">
+            <colgroup>
+              <col width="33%;" />
+              <col width="33%;" />
+              <col width="33%;" />
+            </colgroup>
+            <tbody>
+              <tr v-for="(mht, index) in mhtList" :key="mht.key+'_'+index" @click="changeUrlList(mht)" :style="{color: mht.key==key? 'red': 'black'}">
+                <td>{{ mht.key }}</td>
+                <td>{{ mht.yyyymmdd }}</td>
+                <td>
+                  <input type=checkbox :checked="mht.done" @click="changeDone(mht)" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
           <br>
         </div>
       </b-tab>
@@ -57,6 +70,19 @@ export default {
   },
   methods: {
 
+    changeDone(obj){
+      axios({
+        method: 'POST',
+        url: "/changeDone",
+        data: {
+          key: obj.key,
+          done: !obj.done
+        }
+      }).then((res)=>{
+        this.listMht()
+      })
+    },
+
     changeUrlList(obj){
       this.key = obj.key
       this.showImage = false
@@ -81,7 +107,7 @@ export default {
         url: "/updateMht",
         data: {
           key: this.key,
-          yyyymmdd: this.yyyymmdd,
+          yyyymmdd: this.getYyyymmdd(),
           urlList: this.urlList
         }
       }).then((res)=>{
