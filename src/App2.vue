@@ -28,25 +28,32 @@
         <div>
           <input v-model="key" autofocus @keypress.enter="getImageList()" ref="inputKey" style="width: calc(100% - 170px);" />
           <button @click="getImageList()">Go</button>
-          <button @click="update()">Update</button>
-        </div>
-        <div>
           <button @click="showImage=!showImage">showImage</button>
+          
+        </div>
+        
+        <div class="row" v-if="showImage">
+          <template v-for="(obj, index) in urlList">
+            <div v-if="index < imageUnit*30" class="column" :key="index+'_1'" @click="deleteImage(obj)"
+              :class="{deleted: obj.deleted}"
+            >
+              <img :src="obj.url" style="width: 100%; min-height: 100px;" :style="{opacity: obj.deleted? 0.6: 1}" />
+            </div>
+          </template>
+        </div>
+
+        <div>
+          <button @click="imageUnit=imageUnit+1">more({{ imageUnit*30 }})</button>
           &nbsp;&nbsp;&nbsp;&nbsp;
           <span>{{ urlList.filter((obj)=>obj.deleted).length }}</span>
           <span> / </span>
           <span>{{ urlList.filter((obj)=>!obj.deleted).length }}</span>
+          <button @click="update()">Update</button>
         </div>
-        <div class="row" v-if="showImage">
-          <div class="column" v-for="(obj, index) in urlList" :key="index+'_1'" @click="deleteImage(obj)"
-            :class="{deleted: obj.deleted}"
-          >
-            <img :src="obj.url" style="width: 100%; min-height: 100px;" :style="{opacity: obj.deleted? 0.6: 1}" />
-          </div>
-        </div>
+
       </b-tab>
       <b-tab title="filteredList">
-        <h4>{{ urlList.filter((obj)=>!obj.deleted).length }}</h4>
+        <h4>{{ urlList.filter((obj)=>!obj.deleted).length }} {{ key }}</h4>
         <textarea :value="urlList.filter((obj)=>!obj.deleted).map((obj)=>obj.url).join('\n')" class="textarea" />
       </b-tab>
     </b-tabs>
@@ -64,6 +71,7 @@ export default {
       yyyymmdd: '',
       urlList: [],
       showImage: true,
+      imageUnit: 1,
 
       filterText: ''
     }
@@ -158,6 +166,7 @@ export default {
       this.yyyymmdd = ''
       this.urlList = []
       this.showImage = true
+      this.imageUnit = 1
       axios({
         method: 'POST',
         url: '/getImageList',

@@ -28,6 +28,7 @@ module.exports = {
   processCnt: 0,
   async getImgByUrl(searchQuery, target, number=0, yyyymmdd){
     try{
+      if(number === 0) this.processCnt = 0
       // const $ = await this.urlImageRequest(target.url)
       const imgSrc = target.url
       let exten = String(imgSrc||'').replace(/.*\./g,'')
@@ -55,14 +56,19 @@ module.exports = {
   },
 
   download(uri, filename, callback) {
-    request({
-        uri: uri,
-        method: 'HEAD',
-        timeout: 7000
-      }, function (err, res, body) {
-      if(!res) return
-      request(uri).pipe(fs.createWriteStream(filename)).on('close', ()=>callback(filename, uri))
-    })
+    try {
+      request({
+          uri: uri,
+          method: 'HEAD',
+          timeout: 7000
+        }, function (err, res, body) {
+        if(!res) return
+        request(uri).pipe(fs.createWriteStream(filename)).on('close', ()=>callback(filename, uri))
+      })
+      
+    } catch (error) {
+      console.log('request', error)
+    }
   },
 
   async urlImageRequest(url) {
