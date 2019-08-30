@@ -42,9 +42,8 @@
           </template>
         </div>
 
-        <div>
+        <div style="text-align:center; margin-bottom: 30px;">
           <button @click="imageUnit=imageUnit+1">more({{ imageUnit*30 }})</button>
-          &nbsp;&nbsp;&nbsp;&nbsp;
           <span>{{ urlList.filter((obj)=>obj.deleted).length }}</span>
           <span> / </span>
           <span>{{ urlList.filter((obj)=>!obj.deleted).length }}</span>
