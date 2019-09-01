@@ -269,5 +269,41 @@ app.post('/changeDone', async (req, res)=>{
   const param = req.body || {}
 
   await DBUtil.changeDone(param)
+  await DBUtil.changeSummaryDone(param)
   res.send({ result: 'SUCCESS' })
+})
+
+app.get('/listSummary', async (req, res) => {
+  const param = req.query || {}
+  const pageSize = 30
+  const list = await DBUtil.listSummary({ ...param, pageSize }) || []
+  res.send({
+    list,
+    pageObject: {
+      maxYn: pageSize !== list.length ? 'Y' : 'N',
+      currentPage: param.pageIndex
+    }
+  })
+})
+
+app.get('/insertSummary', async (req, res) => {
+  const param = req.query || {}
+  try {
+    await DBUtil.insertSummary(param)
+    res.send({ result: 'SUCCESS' })
+    
+  } catch (error) {
+    res.send({ result: 'FAIL' })
+  }
+})
+
+app.get('/changeSummaryDone', async (req, res) => {
+  const param = req.query || {}
+  try {
+    await DBUtil.changeSummaryDone(param)
+    res.send({ result: 'SUCCESS' })
+    
+  } catch (error) {
+    res.send({ result: 'FAIL' })
+  }
 })

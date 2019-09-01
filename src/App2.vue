@@ -61,13 +61,58 @@
         <h4>{{ urlList.filter((obj)=>!obj.deleted).length }} {{ key }}</h4>
         <textarea :value="urlList.filter((obj)=>!obj.deleted).map((obj)=>obj.url).join('\n')" class="textarea" />
       </b-tab>
+      <b-tab title="list">
+        <div>
+          <input v-model="summarySearch" @keypress.enter="addSummary()" ref="summarySearchInput" style="width: calc(100% - 170px);" />
+          <button @click="addSummary()">Add</button>
+          <button @click="getSummary({pageIndex:1})">Search</button>
+        </div>
+        <div style="text-align:center; margin-bottom: 30px;">
+          <button @click="doneFilter('T')" :style="{color: doneFilterTf=='T'? 'blue': ''}">Done T</button>
+          <button @click="doneFilter('F')" :style="{color: doneFilterTf=='F'? 'blue': ''}">Done F</button>
+        </div>
+        <div class="wrap-contents">
+          <Scroll-Table
+            :list="summaryList"
+            :page-object="summaryPageObject"
+            @search="getSummary"
+          >
+            <colgroup slot="colgroup">
+              <col width="70%">
+              <col width="30%">
+            </colgroup>
+            <template slot="thead">
+              <tr>
+                <td>Name</td>
+                <td>Done</td>
+              </tr>
+            </template>
+            <template slot="tbody">
+              <tr
+                v-for="summary in summaryList"
+                :key="summary._id"
+                :style="{'background-color': !summary.done? 'beige': 'white'}"
+              >
+                <td>{{ summary.key }}</td>
+                <td>
+                  <button @click="changeSummaryDone(summary)">{{ summary.done }}</button>
+                </td>
+              </tr>
+            </template>
+          </Scroll-Table>
+        </div>
+      </b-tab>
     </b-tabs>
   </div>
 </template>
 <script>
 import axios from 'axios'
+import ScrollTable from './common/ScrollTable.vue'
 
 export default {
+  components: {
+    ScrollTable
+  },
   data(){
     return {
       mhtList: [],
@@ -78,10 +123,73 @@ export default {
       showImage: true,
       imageUnit: 1,
 
-      filterText: ''
+      filterText: '',
+
+      summarySearch: '',
+      summaryList: [],
+      summaryPageObject: {},
+      doneFilterTf: '',
     }
   },
   methods: {
+
+    doneFilter(param){
+      if(this.doneFilterTf == param){
+        this.doneFilterTf = ''
+      }else{
+        this.doneFilterTf = param
+      }
+      this.getSummary({pageIndex: 1})
+    },
+
+    async changeSummaryDone (summary) {
+      const res = await axios({
+        url: '/changeSummaryDone',
+        params: {
+          ...summary,
+          done: !summary.done
+        }
+      })
+      console.log('changeSummaryDone', res)
+      if (res.data.result !== 'SUCCESS') {
+        alert('error')
+        return
+      }
+      summary.done = !summary.done
+    },
+    
+    async getSummary (param = {}) {
+      const res = await axios({
+        url: '/listSummary',
+        params: { 
+          ...param, 
+          key: this.summarySearch,
+          doneFilterTf: this.doneFilterTf
+        }
+      })
+      const list = res.data.list || []
+      console.log('listsummary call', res.data)
+      this.summaryList = param.pageIndex === 1 ? list : this.summaryList.concat(list)
+      this.summaryPageObject = res.data.pageObject || {}
+    },
+
+    async addSummary () {
+      if(!this.summarySearch) return
+      const res = await axios({
+        url: '/insertSummary',
+        params: {
+          key: this.summarySearch
+        }
+      })
+      console.log('insertSummary', res)
+      if (res.data.result !== 'SUCCESS') {
+        alert('error')
+        return
+      }
+      this.summarySearch = ''
+      this.getSummary({ pageIndex: 1 })
+        
+    },
 
     changeDone(obj){
       axios({
@@ -219,5 +327,14 @@ export default {
 .textarea {
   height: 500px;
   width: 100%;
+}
+
+.wrap-contents {
+  width: 100%;
+  /* height: calc(100% - 60px); */
+  height: 400px;
+}
+.tab-pane {
+  min-height: 300px;
 }
 </style>
