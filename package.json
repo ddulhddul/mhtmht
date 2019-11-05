@@ -25,7 +25,7 @@
     "express": "^4.17.1",
     "fs": "0.0.1-security",
     "html-webpack-plugin": "^3.2.0",
-    "mongoose": "^5.6.10",
+    "mongoose": "^5.7.5",
     "request": "^2.88.0",
     "style-loader": "^0.23.1",
     "text-mask-addons": "^3.8.0",
