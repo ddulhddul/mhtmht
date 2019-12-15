@@ -54,6 +54,8 @@
           <span> / </span>
           <span>{{ urlList.filter((obj)=>!obj.deleted).length }}</span>
           <button @click="update()">Update</button>
+          <span> / </span>
+          <button @click="goUp()">Top</button>
         </div>
 
       </b-tab>
@@ -132,6 +134,10 @@ export default {
     }
   },
   methods: {
+
+    goUp () {
+      window.scrollTo(0, 0)
+    },
 
     doneFilter(param){
       if(this.doneFilterTf == param){
