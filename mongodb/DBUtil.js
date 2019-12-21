@@ -40,7 +40,7 @@ module.exports = {
   },
 
   async listMht () {
-    return await Mht.find({}, null, { sort: { yyyymmdd: 1 } }).limit(50) || {}
+    return await Mht.find({}, null, { sort: { yyyymmdd: -1 } }).limit(50) || {}
   },
 
   async updateMht (obj={}) {
