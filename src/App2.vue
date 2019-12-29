@@ -162,6 +162,10 @@ export default {
         return
       }
       summary.done = !summary.done
+      if(summary.done) {
+        this.key = summary.key
+        this.getImageList()
+      }
     },
     
     async getSummary (param = {}) {
