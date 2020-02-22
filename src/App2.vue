@@ -1,6 +1,6 @@
 <template>
   <div style='max-width: 600px; width: 100%;'>
-    <b-tabs content-class="mt-3 wrap-b-tabs">
+    <b-tabs content-class="mt-3 wrap-b-tabs" nav-wrapper-class="sticky">
       <b-tab title="History">
         <button @click="listMht()">Search</button>
         <br><br>
@@ -48,7 +48,7 @@
           </template>
         </div>
 
-        <div style="text-align:center; margin-bottom: 30px;">
+        <div style="text-align: center;margin-bottom: 30px;position: sticky !important;bottom: 0px;background-color: white;">
           <button @click="imageUnit=imageUnit+1">more({{ imageUnit*30 }})</button>
           <span>{{ urlList.filter((obj)=>obj.deleted).length }}</span>
           <span> / </span>
@@ -307,6 +307,11 @@ export default {
 }
 </script>
 <style>
+.sticky {
+  position: sticky;
+  background-color: white;
+  top: 0px;
+}
 .row {
   /* height: 600px; */
   overflow-y: auto;
