@@ -15,13 +15,13 @@ module.exports = {
       const $ = await this.urlRequest(url)
       if(!$) return
 
-      list = $.html().match(/http.*?\&/g).filter((obj)=>{
+      list = $.html().match(/http.*?\.(jpg|png|jpeg|gif)/g).filter((obj)=>{
         if(!obj) return false
-        else if(obj.indexOf("'") != -1 || obj.indexOf('"') != -1) return false
+        // else if(obj.indexOf("'") != -1 || obj.indexOf('"') != -1) return false
         else if(obj.indexOf('http://') == -1 && obj.indexOf('https://') == -1) return false
-        else if(!obj.match(/\.(jpg|png|jpeg|gif)\&$/)) return false
+        else if(!obj.match(/\.(jpg|png|jpeg|gif)$/)) return false
         return true
-      }).map((obj)=>obj.replace(/\&$/,''))
+      }).map((obj)=>obj.replace(/\"/,''))
       // Common.writeFile('test.html', list.join('\n'))
       
     } catch (error) {
