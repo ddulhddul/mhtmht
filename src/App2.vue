@@ -68,6 +68,7 @@
           <input v-model="summarySearch" @keypress.enter="addSummary()" ref="summarySearchInput" style="width: calc(100% - 170px);" />
           <button @click="addSummary()">Add</button>
           <button @click="getSummary({pageIndex:1})">Search</button>
+          <button @click="searchTistory()">T.Search</button>
         </div>
         <div style="text-align:center; margin-bottom: 30px;">
           <button @click="doneFilter('T')" :style="{color: doneFilterTf=='T'? 'blue': ''}">Done T</button>
@@ -134,6 +135,11 @@ export default {
     }
   },
   methods: {
+    async searchTistory () {
+      const url = 'https://mhtht.tistory.com/search/' + encodeURI(this.summarySearch)
+      const win = window.open(url, '_blank')
+      win.focus()
+    },
 
     goUp () {
       window.scrollTo(0, 0)
